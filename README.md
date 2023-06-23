@@ -1,4 +1,4 @@
-# MERN-book-search-13
+# Challenge 13: MERN Book Search
 
 ## Description
 

@@ -60,9 +60,9 @@ Check out the deployed app on [Heroku](https://boiling-ocean-90033-b0a098801dc7.
 
 * At root, enter: npm run develop
 
-## How To
+## Thanks
 
-Go over to insomnia to successfully test all routes
+Shout out to the 15 or so repos I scoured, ChatGPT, and lectures I rewatched multiple times
 
 ## Visuals
 

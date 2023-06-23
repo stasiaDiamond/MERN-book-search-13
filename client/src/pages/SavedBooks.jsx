@@ -1,15 +1,25 @@
 import React from 'react';
+import {
+  Container,
+  Card,
+  Button,
+  Row,
+  Col
+} from 'react-bootstrap';
+
+
 import Auth from '../utils/auth';
-import { Container, Card, Button, Row, Col } from 'react-bootstrap';
 import { removeBookId } from '../utils/localStorage';
+
 import { QUERY_ME } from '../utils/queries';
 import { useQuery, useMutation } from '@apollo/client';
 import { REMOVE_BOOK } from '../utils/mutations';
 
 const SavedBooks = () => {
+  //  const [userData, setUserData] = useState();
 
-  const {loading, data} = useQuery(QUERY_ME)
-  
+  const { loading, data } = useQuery(QUERY_ME)
+
   const [removeBook] = useMutation(REMOVE_BOOK)
   const userData = data?.me || []
 
@@ -22,8 +32,8 @@ const SavedBooks = () => {
     }
 
     try {
-      const {data} = await removeBook({
-        variables: {bookId}
+      const { data } = await removeBook({
+        variables: { bookId }
       });
 
       // setUserData(data.removeBook);
@@ -36,24 +46,24 @@ const SavedBooks = () => {
 
   // if data isn't here yet, say so
   if (loading) {
-    return <h2>LOADING...</h2>;
+    return <div>Loading...</div>
   }
 
   return (
     <>
-      <div fluid className="text-light bg-dark p-5">
+      <div className="text-light bg-dark p-5">
         <Container>
           <h1>Viewing saved books!</h1>
         </Container>
       </div>
       <Container>
         <h2 className='pt-5'>
-          {userData.savedBooks.length
+          {userData.savedBooks
             ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
             : 'You have no saved books!'}
         </h2>
         <Row>
-          {userData.savedBooks.map((book) => {
+          {userData.savedBooks?.map((book) => {
             return (
               <Col md="4">
                 <Card key={book.bookId} border='dark'>
@@ -75,5 +85,6 @@ const SavedBooks = () => {
     </>
   );
 };
+
 
 export default SavedBooks;

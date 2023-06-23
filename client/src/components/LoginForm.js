@@ -1,17 +1,17 @@
-// see SignupForm.js for comments
-import React, { useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
-import { useMutation } from "@apollo/client";
-import { LOGIN } from "../utils/mutations";
+import React, { useState } from 'react';
+import { Form, Button, Alert } from 'react-bootstrap';
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER } from '../utils/mutations';
 
 import Auth from '../utils/auth';
 
 const LoginForm = () => {
-  const [login] = useMutation(LOGIN);
-
-  const [userFormData, setUserFormData] = useState({ email: "", password: "" });
-  const [validated, setValidated] = useState(false);
+  const [userFormData, setUserFormData] = useState({ email: '', password: '' });
+  const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [login, { error, data }] = useMutation(LOGIN_USER, {
+    variables: userFormData,
+  });
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -23,19 +23,20 @@ const LoginForm = () => {
 
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
+      event.preventDefault();
       event.stopPropagation();
     }
 
-    setValidated(true);
-
     try {
-      const { data } = await login({
-        variables: { ...userFormData },
-      });
+      const response = await login();
 
-      const { token, user } = data.login;
-      console.log(user);
+      if (error) {
+        throw new Error('something went wrong!');
+      }
+
+      const { token, user } = response.data.login;
       Auth.login(token);
+      setShowAlert(false);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
@@ -56,7 +57,7 @@ const LoginForm = () => {
         <Form.Group className='mb-3'>
           <Form.Label htmlFor='email'>Email</Form.Label>
           <Form.Control
-            type='email'
+            type='text'
             placeholder='Your email'
             name='email'
             onChange={handleInputChange}

@@ -25,6 +25,7 @@
   "homepage": "https://github.com/stasiaDiamond/MERN-book-search-13#readme",
   "dependencies": {
     "@apollo/client": "^3.7.16",
+    "@apollo/react-hooks": "^4.0.0",
     "apollo-server-express": "^3.12.0",
     "graphql": "^16.7.1",
     "react-bootstrap": "^2.8.0",

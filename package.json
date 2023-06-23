@@ -22,5 +22,12 @@
   "bugs": {
     "url": "https://github.com/stasiaDiamond/MERN-book-search-13/issues"
   },
-  "homepage": "https://github.com/stasiaDiamond/MERN-book-search-13#readme"
+  "homepage": "https://github.com/stasiaDiamond/MERN-book-search-13#readme",
+  "dependencies": {
+    "@apollo/client": "^3.7.16",
+    "apollo-server-express": "^3.12.0",
+    "graphql": "^16.7.1",
+    "react-bootstrap": "^2.8.0",
+    "react-router-dom": "^6.13.0"
+  }
 }

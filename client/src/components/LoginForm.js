@@ -1,13 +1,16 @@
 // see SignupForm.js for comments
-import React, { useState } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import React, { useState } from "react";
+import { Form, Button, Alert } from "react-bootstrap";
+import { useMutation } from "@apollo/client";
+import { LOGIN } from "../utils/mutations";
 
-import { loginUser } from '../utils/API';
 import Auth from '../utils/auth';
 
 const LoginForm = () => {
-  const [userFormData, setUserFormData] = useState({ email: '', password: '' });
-  const [validated] = useState(false);
+  const [login] = useMutation(LOGIN);
+
+  const [userFormData, setUserFormData] = useState({ email: "", password: "" });
+  const [validated, setValidated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
   const handleInputChange = (event) => {
@@ -18,21 +21,19 @@ const LoginForm = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
     }
 
+    setValidated(true);
+
     try {
-      const response = await loginUser(userFormData);
+      const { data } = await login({
+        variables: { ...userFormData },
+      });
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-
-      const { token, user } = await response.json();
+      const { token, user } = data.login;
       console.log(user);
       Auth.login(token);
     } catch (err) {
@@ -41,7 +42,6 @@ const LoginForm = () => {
     }
 
     setUserFormData({
-      username: '',
       email: '',
       password: '',
     });
@@ -56,7 +56,7 @@ const LoginForm = () => {
         <Form.Group className='mb-3'>
           <Form.Label htmlFor='email'>Email</Form.Label>
           <Form.Control
-            type='text'
+            type='email'
             placeholder='Your email'
             name='email'
             onChange={handleInputChange}
@@ -81,7 +81,8 @@ const LoginForm = () => {
         <Button
           disabled={!(userFormData.email && userFormData.password)}
           type='submit'
-          variant='success'>
+          variant='success'
+        >
           Submit
         </Button>
       </Form>
